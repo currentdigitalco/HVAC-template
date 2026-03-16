@@ -113,7 +113,16 @@ body::before {
   z-index: 1;
 }
 
+/* Prevent flash of unstyled content — Jesko Jets pattern.
+   Elements with data-reveal start hidden; RevealEngine shows them. */
+[data-reveal] {
+  visibility: hidden;
+}
+
 @media (prefers-reduced-motion: reduce) {
+  [data-reveal] {
+    visibility: visible !important;
+  }
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;

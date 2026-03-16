@@ -23,6 +23,28 @@ export default function Stats() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
+      // Staggered entrance for stat items (triggered once)
+      const items = sectionRef.current?.querySelectorAll(".stat-item");
+      if (items) {
+        gsap.fromTo(
+          items,
+          { y: 40, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.8,
+            stagger: 0.12,
+            ease: "power3.out",
+            scrollTrigger: {
+              trigger: sectionRef.current,
+              start: "top 85%",
+              once: true,
+            },
+          }
+        );
+      }
+
+      // Counter animation (triggered once per stat)
       const counters = sectionRef.current?.querySelectorAll(".stat-value");
       if (!counters) return;
 
@@ -44,50 +66,6 @@ export default function Stats() {
           },
         });
       });
-
-      // Stat values: clip-path wipe reveal (scrub-linked)
-      const statValues = sectionRef.current?.querySelectorAll(".stat-value");
-      if (statValues) {
-        statValues.forEach((el) => {
-          gsap.fromTo(
-            el,
-            { clipPath: "inset(0 100% 0 0)", opacity: 0 },
-            {
-              clipPath: "inset(0 0% 0 0)",
-              opacity: 1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: el,
-                start: "top 88%",
-                end: "top 65%",
-                scrub: 0.5,
-              },
-            }
-          );
-        });
-      }
-
-      // Labels: scrub-linked y + opacity
-      const labels = sectionRef.current?.querySelectorAll(".stat-label");
-      if (labels) {
-        labels.forEach((el) => {
-          gsap.fromTo(
-            el,
-            { y: 20, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: el,
-                start: "top 88%",
-                end: "top 65%",
-                scrub: 0.5,
-              },
-            }
-          );
-        });
-      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -102,7 +80,7 @@ export default function Stats() {
       <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
           {STATS.map((stat) => (
-            <div key={stat.label} className="text-center">
+            <div key={stat.label} className="stat-item text-center">
               <div className="flex items-baseline justify-center gap-1">
                 <span
                   className="stat-value font-serif text-5xl text-terracotta lg:text-6xl"
@@ -114,14 +92,13 @@ export default function Stats() {
                   {stat.suffix}
                 </span>
               </div>
-              <p className="stat-label mt-3 font-sans text-sm font-light uppercase tracking-widest text-cream/30">
+              <p className="mt-3 font-sans text-sm font-light uppercase tracking-widest text-cream/30">
                 {stat.label}
               </p>
             </div>
           ))}
         </div>
       </div>
-
     </section>
   );
 }

@@ -237,49 +237,14 @@ function ProjectCase({ project, index }: { project: any, index: number }) {
 }
 
 export default function PerformanceCaseStudies() {
-  const headerRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReduced) return;
-
-    const ctx = gsap.context(() => {
-      // Headings: clip-path wipe reveal (scrub-linked)
-      const els = headerRef.current?.querySelectorAll(".heading-reveal");
-      if (els) {
-        els.forEach((el, i) => {
-          gsap.fromTo(
-            el,
-            { clipPath: "inset(0 100% 0 0)", opacity: 0 },
-            {
-              clipPath: "inset(0 0% 0 0)",
-              opacity: 1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: el,
-                start: `top ${82 - i * 4}%`,
-                end: `top ${52 - i * 4}%`,
-                scrub: 0.5,
-              },
-            }
-          );
-        });
-      }
-    }, headerRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section id="projects" className="relative overflow-hidden" data-nav-theme="dark">
-      <div ref={headerRef} className="max-w-7xl mx-auto px-6 lg:px-8 py-24 relative z-20">
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 py-24 relative z-20">
         <div className="mb-16">
-          <span className="heading-reveal mask-reveal-wipe text-terracotta uppercase tracking-[0.3em] font-sans text-xs font-bold mb-4 block">
+          <span data-reveal="clip-left" className="text-terracotta uppercase tracking-[0.3em] font-sans text-xs font-bold mb-4 block">
             Proven Outcomes
           </span>
-          <h2 className="heading-reveal mask-reveal-wipe text-4xl md:text-5xl lg:text-6xl font-serif text-white max-w-2xl">
+          <h2 data-reveal="clip-left" data-reveal-delay="0.1" className="text-4xl md:text-5xl lg:text-6xl font-serif text-white max-w-2xl">
             Hard engineering. <br/><span className="italic font-light">Real results.</span>
           </h2>
         </div>

@@ -1,5 +1,6 @@
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import AtmosphericHaze from "@/components/ui/AtmosphericHaze";
+import RevealEngine from "@/components/ui/RevealEngine";
 import Navbar from "@/components/layout/Navbar";
 import ThermostatHero from "@/components/sections/ThermostatHero";
 import ThermalServices from "@/components/sections/ThermalServices";
@@ -15,6 +16,7 @@ export default function Home() {
   return (
     <SmoothScroll>
       <AtmosphericHaze />
+      <RevealEngine />
       <Navbar />
       <main>
         {/* Hero renders as fixed overlay + 200vh scroll spacer.

@@ -1,12 +1,7 @@
 "use client";
 
-import { useRef, useEffect } from "react";
 import { motion, useMotionTemplate, useMotionValue } from "framer-motion";
-import { gsap } from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Thermometer, Wrench, Wind, Droplets } from "lucide-react";
-
-gsap.registerPlugin(ScrollTrigger);
 
 const SERVICES = [
   {
@@ -25,13 +20,13 @@ const SERVICES = [
     title: "Ductwork Optimization",
     description: "Poor ductwork loses up to 30% of your conditioned air. We seal, insulate, and redesign your layout for maximum distribution.",
     icon: Wind,
-    image: "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80"
+    image: "/images/ductwork-visual.png"
   },
   {
     title: "Air Quality Control",
     description: "Breathe easier with whole-home filtration, UV purification, and humidity balance systems designed to eradicate pollutants.",
     icon: Droplets,
-    image: "https://images.unsplash.com/photo-1631545806609-05faf2faf3f5?w=800&q=80"
+    image: "/images/air-quality-visual.png"
   }
 ];
 
@@ -69,7 +64,7 @@ function ThermalCard({ service }: { service: any }) {
         <img
           src={service.image}
           alt={service.title}
-          className="absolute inset-0 w-full h-full object-cover md:grayscale opacity-70 md:opacity-40 transition-opacity duration-500 md:group-hover:opacity-20"
+          className="absolute inset-0 w-full h-full object-cover opacity-70 md:opacity-60 transition-opacity duration-500 md:group-hover:opacity-30"
         />
 
         <motion.div
@@ -155,94 +150,33 @@ function ThermalCard({ service }: { service: any }) {
 }
 
 export default function ThermalServices() {
-  const sectionRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    const prefersReduced = window.matchMedia(
-      "(prefers-reduced-motion: reduce)"
-    ).matches;
-    if (prefersReduced) return;
-
-    const ctx = gsap.context(() => {
-      // Headings: clip-path wipe reveal (scrub-linked to scroll)
-      const headingEls = sectionRef.current?.querySelectorAll(".heading-reveal");
-      if (headingEls) {
-        headingEls.forEach((el, i) => {
-          gsap.fromTo(
-            el,
-            { clipPath: "inset(0 100% 0 0)", opacity: 0 },
-            {
-              clipPath: "inset(0 0% 0 0)",
-              opacity: 1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: el,
-                start: `top ${82 - i * 4}%`,
-                end: `top ${52 - i * 4}%`,
-                scrub: 0.5,
-              },
-            }
-          );
-        });
-      }
-
-      // Cards: scrub-linked y + scale entrance
-      const cards = sectionRef.current?.querySelectorAll(".service-card");
-      if (cards) {
-        cards.forEach((card) => {
-          gsap.fromTo(
-            card,
-            { y: 60, opacity: 0, scale: 0.95 },
-            {
-              y: 0,
-              opacity: 1,
-              scale: 1,
-              ease: "none",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 92%",
-                end: "top 60%",
-                scrub: 0.5,
-              },
-            }
-          );
-        });
-      }
-    }, sectionRef);
-
-    return () => ctx.revert();
-  }, []);
-
   return (
     <section
-      ref={sectionRef}
       id="services"
       className="py-24 lg:py-32 relative"
       data-nav-theme="dark"
     >
-
       <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16 md:mb-24">
-          <span className="heading-reveal text-terracotta uppercase tracking-[0.3em] font-sans text-xs font-bold mb-4 block">
+          <span data-reveal="clip-left" className="text-terracotta uppercase tracking-[0.3em] font-sans text-xs font-bold mb-4 block">
             What We Do
           </span>
-          <h2 className="heading-reveal text-4xl md:text-5xl lg:text-6xl font-serif text-cream">
+          <h2 data-reveal="char" className="text-4xl md:text-5xl lg:text-6xl font-serif text-cream">
             We see the invisible.
           </h2>
-          <p className="heading-reveal mt-6 text-cream/60 max-w-2xl mx-auto font-light font-sans text-lg">
+          <p data-reveal="fade-up" data-reveal-delay="0.2" className="mt-6 text-cream/60 max-w-2xl mx-auto font-light font-sans text-lg">
             Stop guessing why your energy bills are high or your rooms are uncomfortable. We use advanced thermal diagnostics to pinpoint the problem and engineer the perfect fix.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           {SERVICES.map((service, i) => (
-            <div key={i} className="service-card">
+            <div key={i} data-reveal="fade-up">
               <ThermalCard service={service} />
             </div>
           ))}
         </div>
       </div>
-
     </section>
   );
 }
