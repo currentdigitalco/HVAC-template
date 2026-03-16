@@ -1,7 +1,8 @@
 import SmoothScroll from "@/components/ui/SmoothScroll";
 import Navbar from "@/components/layout/Navbar";
-import Hero from "@/components/sections/Hero";
-import Services from "@/components/sections/Services";
+import ThermostatHero from "@/components/sections/ThermostatHero";
+import ThermalServices from "@/components/sections/ThermalServices";
+import ExplodedHVAC from "@/components/sections/ExplodedHVAC";
 import AirPath from "@/components/sections/AirPath";
 import BeforeAfter from "@/components/sections/BeforeAfter";
 import About from "@/components/sections/About";
@@ -15,9 +16,10 @@ export default function Home() {
     <SmoothScroll>
       <Navbar />
       <main>
-        <Hero />
-        <Services />
+        <ThermostatHero />
+        <ThermalServices />
         <AirPath />
+        <ExplodedHVAC />
         <BeforeAfter />
         <About />
         <Stats />

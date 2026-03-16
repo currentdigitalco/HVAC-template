@@ -1,17 +1,19 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-ivory: #F8F5F0;
-  --color-ivory-alt: #F0EDE7;
-  --color-navy: #0D1B2A;
-  --color-navy-light: #162A3F;
-  --color-terracotta: #C2714F;
-  --color-terracotta-light: #D4927A;
-  --color-sand: #D8D0C4;
-  --color-sand-light: #E8E2D8;
+  --color-ivory: #F8FAFC;
+  --color-ivory-alt: #F1F5F9;
+  --color-navy: #0F172A;
+  --color-navy-light: #1E293B;
+  --color-accent-blue: #2563EB;
+  --color-accent-blue-light: #60A5FA;
+  --color-terracotta: #EA580C;
+  --color-terracotta-light: #FB923C;
+  --color-sand: #CBD5E1;
+  --color-sand-light: #E2E8F0;
 
-  --font-serif: var(--font-cormorant-garamond), "Georgia", serif;
-  --font-sans: var(--font-karla), "Helvetica Neue", sans-serif;
+  --font-serif: var(--font-montserrat), "Helvetica", sans-serif;
+  --font-sans: var(--font-inter), "Helvetica Neue", sans-serif;
 }
 
 /* Smooth scroll handled by Lenis */

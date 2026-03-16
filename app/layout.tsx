@@ -1,26 +1,26 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Karla } from "next/font/google";
+import { Montserrat, Inter } from "next/font/google";
 import "./globals.css";
 
-const cormorantGaramond = Cormorant_Garamond({
-  variable: "--font-cormorant-garamond",
+const montserrat = Montserrat({
+  variable: "--font-montserrat",
   subsets: ["latin"],
-  weight: ["400", "600"],
+  weight: ["400", "700", "900"],
   style: ["normal", "italic"],
   display: "swap",
 });
 
-const karla = Karla({
-  variable: "--font-karla",
+const inter = Inter({
+  variable: "--font-inter",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600"],
+  weight: ["300", "400", "500", "600", "700"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Precision Climate | The Architecture of Comfort",
+  title: "Precision Climate | High-Performance HVAC Engineering",
   description:
-    "Expert HVAC installation, maintenance, and indoor air quality solutions — engineered for lasting comfort in every space.",
+    "Reliable, high-efficiency HVAC installation and 24/7 repair services. Engineering comfort for your home and business.",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${cormorantGaramond.variable} ${karla.variable}`}>
+      <body className={`${montserrat.variable} ${inter.variable}`}>
         {children}
       </body>
     </html>
