@@ -38,7 +38,6 @@ function PerformanceDial({ progress, stats }: { progress: any, stats: any }) {
   const currentHumidity = useTransform(progress, [0, 1], [parseInt(stats[0].humidity), parseInt(stats[1].humidity)]);
   const status = useTransform(progress, (v: number) => v > 0.8 ? "Optimized" : "Calibrating");
 
-  // Hoist all useTransform calls out of JSX
   const ringRedOffset = useTransform(progress, [0, 1], ["283%", "40%"]);
   const ringRedOpacity = useTransform(progress, [0, 0.2], [1, 0.2]);
   const ringBlueOffset = useTransform(progress, [0, 1], ["283%", "0%"]);
@@ -63,7 +62,6 @@ function PerformanceDial({ progress, stats }: { progress: any, stats: any }) {
 
   return (
     <div className="relative w-full max-w-[280px] sm:max-w-[350px] md:max-w-[400px] aspect-square rounded-full border border-white/10 bg-white/10 backdrop-blur-3xl shadow-2xl flex flex-col items-center justify-center overflow-hidden">
-        {/* Animated Ring */}
         <svg className="absolute inset-0 w-full h-full -rotate-90">
             <motion.circle
                 cx="50%"
@@ -98,7 +96,7 @@ function PerformanceDial({ progress, stats }: { progress: any, stats: any }) {
         <div className="text-center z-10">
             <span className="block text-[60px] sm:text-[80px] md:text-[100px] font-serif font-bold text-white leading-none tabular-nums">
                 <span ref={tempRef}>{stats[0].temp}</span>
-                <span className="text-2xl sm:text-3xl md:text-4xl align-top mt-4 inline-block">°</span>
+                <span className="text-2xl sm:text-3xl md:text-4xl align-top mt-4 inline-block">&deg;</span>
             </span>
             <div className="flex gap-3 sm:gap-4 mt-2 justify-center border-t border-white/10 pt-3 sm:pt-4">
                 <div className="text-left">
@@ -120,7 +118,6 @@ function PerformanceDial({ progress, stats }: { progress: any, stats: any }) {
             </div>
         </div>
 
-        {/* Background "Ghost" Metrics */}
         <div className="absolute inset-0 p-8 sm:p-12 opacity-5 pointer-events-none">
             <div className="w-full h-full border-2 border-dashed border-white rounded-full animate-[spin_60s_linear_infinite]" />
         </div>
@@ -130,6 +127,7 @@ function PerformanceDial({ progress, stats }: { progress: any, stats: any }) {
 
 function ProjectCase({ project, index }: { project: any, index: number }) {
   const ref = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: ref,
     offset: ["start end", "end start"]
@@ -139,16 +137,49 @@ function ProjectCase({ project, index }: { project: any, index: number }) {
   const bgScale = useTransform(scrollYProgress, [0, 1], [1.1, 1]);
   const bgY = useTransform(scrollYProgress, [0, 1], ["-10%", "10%"]);
 
+  useEffect(() => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced || !cardRef.current) return;
+
+    // Mask reveal on the card
+    const ctx = gsap.context(() => {
+      gsap.fromTo(
+        cardRef.current,
+        { "--mask-size": "0%" } as any,
+        {
+          "--mask-size": "150%" as any,
+          duration: 1.2,
+          ease: "power2.out",
+          scrollTrigger: {
+            trigger: cardRef.current,
+            start: "top 80%",
+          },
+        }
+      );
+    });
+
+    return () => ctx.revert();
+  }, []);
+
   return (
     <div ref={ref} className="relative min-h-screen flex items-center overflow-hidden">
         {/* Background Image with Parallax */}
-        <motion.div 
+        <motion.div
             style={{ scale: bgScale, y: bgY }}
             className="absolute inset-0 z-0"
         >
             <div className="absolute inset-0 bg-navy/60 z-10 backdrop-blur-[1px]" />
-            <img 
-                src={project.image} 
+            {/* Atmospheric vignette over the bg image */}
+            <div
+              className="absolute inset-0 z-20 pointer-events-none"
+              style={{
+                background: "radial-gradient(ellipse at 50% 50%, transparent 20%, rgba(15,23,42,0.4) 80%, rgba(15,23,42,0.7) 100%)"
+              }}
+            />
+            <img
+                src={project.image}
                 alt={project.title}
                 className="w-full h-full object-cover"
             />
@@ -156,7 +187,7 @@ function ProjectCase({ project, index }: { project: any, index: number }) {
 
         <div className="relative z-20 w-full max-w-7xl mx-auto px-6 lg:px-8 py-24">
             <div className="grid lg:grid-cols-2 gap-12 lg:gap-24 items-center">
-                <div className={index % 2 === 1 ? "lg:order-2" : ""}>
+                <div ref={cardRef} className={`mask-reveal-thermal ${index % 2 === 1 ? "lg:order-2" : ""}`}>
                     <motion.div
                         initial={{ opacity: 0, x: index % 2 === 0 ? -30 : 30 }}
                         whileInView={{ opacity: 1, x: 0 }}
@@ -181,14 +212,14 @@ function ProjectCase({ project, index }: { project: any, index: number }) {
                             <div>
                                 <span className="block text-[10px] uppercase tracking-widest text-white/40 font-bold mb-1">Baseline</span>
                                 <div className="flex items-baseline gap-1 text-white opacity-50">
-                                    <span className="text-2xl font-serif">{project.stats[0].temp}°</span>
+                                    <span className="text-2xl font-serif">{project.stats[0].temp}&deg;</span>
                                     <span className="text-xs font-sans">/ {project.stats[0].humidity}% RH</span>
                                 </div>
                             </div>
                             <div>
                                 <span className="block text-[10px] uppercase tracking-widest text-terracotta font-bold mb-1">Output</span>
                                 <div className="flex items-baseline gap-1 text-sky-400 font-bold">
-                                    <span className="text-2xl font-serif">{project.stats[1].temp}°</span>
+                                    <span className="text-2xl font-serif">{project.stats[1].temp}&deg;</span>
                                     <span className="text-xs font-sans">/ {project.stats[1].humidity}% RH</span>
                                 </div>
                             </div>
@@ -215,23 +246,26 @@ export default function PerformanceCaseStudies() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
+      // Headings: clip-path wipe reveal (scrub-linked)
       const els = headerRef.current?.querySelectorAll(".heading-reveal");
       if (els) {
-        gsap.fromTo(
-          els,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.8,
-            stagger: 0.12,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: headerRef.current,
-              start: "top 75%",
-            },
-          }
-        );
+        els.forEach((el, i) => {
+          gsap.fromTo(
+            el,
+            { clipPath: "inset(0 100% 0 0)", opacity: 0 },
+            {
+              clipPath: "inset(0 0% 0 0)",
+              opacity: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: el,
+                start: `top ${82 - i * 4}%`,
+                end: `top ${52 - i * 4}%`,
+                scrub: 0.5,
+              },
+            }
+          );
+        });
       }
     }, headerRef);
 
@@ -239,13 +273,13 @@ export default function PerformanceCaseStudies() {
   }, []);
 
   return (
-    <section id="projects" className="bg-navy relative overflow-hidden" data-nav-theme="dark">
+    <section id="projects" className="relative overflow-hidden" data-nav-theme="dark">
       <div ref={headerRef} className="max-w-7xl mx-auto px-6 lg:px-8 py-24 relative z-20">
         <div className="mb-16">
-          <span className="heading-reveal text-terracotta uppercase tracking-[0.3em] font-sans text-xs font-bold mb-4 block opacity-0">
+          <span className="heading-reveal mask-reveal-wipe text-terracotta uppercase tracking-[0.3em] font-sans text-xs font-bold mb-4 block">
             Proven Outcomes
           </span>
-          <h2 className="heading-reveal text-4xl md:text-5xl lg:text-6xl font-serif text-white max-w-2xl opacity-0">
+          <h2 className="heading-reveal mask-reveal-wipe text-4xl md:text-5xl lg:text-6xl font-serif text-white max-w-2xl">
             Hard engineering. <br/><span className="italic font-light">Real results.</span>
           </h2>
         </div>

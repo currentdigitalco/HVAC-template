@@ -45,23 +45,48 @@ export default function Stats() {
         });
       });
 
+      // Stat values: clip-path wipe reveal (scrub-linked)
+      const statValues = sectionRef.current?.querySelectorAll(".stat-value");
+      if (statValues) {
+        statValues.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { clipPath: "inset(0 100% 0 0)", opacity: 0 },
+            {
+              clipPath: "inset(0 0% 0 0)",
+              opacity: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: el,
+                start: "top 88%",
+                end: "top 65%",
+                scrub: 0.5,
+              },
+            }
+          );
+        });
+      }
+
+      // Labels: scrub-linked y + opacity
       const labels = sectionRef.current?.querySelectorAll(".stat-label");
       if (labels) {
-        gsap.fromTo(
-          labels,
-          { y: 20, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.6,
-            stagger: 0.1,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 80%",
-            },
-          }
-        );
+        labels.forEach((el) => {
+          gsap.fromTo(
+            el,
+            { y: 20, opacity: 0 },
+            {
+              y: 0,
+              opacity: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: el,
+                start: "top 88%",
+                end: "top 65%",
+                scrub: 0.5,
+              },
+            }
+          );
+        });
       }
     }, sectionRef);
 
@@ -72,11 +97,9 @@ export default function Stats() {
     <section
       ref={sectionRef}
       data-nav-theme="dark"
-      className="relative bg-navy py-20 lg:py-28"
+      className="relative py-20 lg:py-28"
     >
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-terracotta/30 to-transparent" />
-
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
           {STATS.map((stat) => (
             <div key={stat.label} className="text-center">
@@ -91,7 +114,7 @@ export default function Stats() {
                   {stat.suffix}
                 </span>
               </div>
-              <p className="stat-label mt-3 font-sans text-sm font-light uppercase tracking-widest text-ivory/30 opacity-0">
+              <p className="stat-label mt-3 font-sans text-sm font-light uppercase tracking-widest text-cream/30">
                 {stat.label}
               </p>
             </div>
@@ -99,7 +122,6 @@ export default function Stats() {
         </div>
       </div>
 
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-terracotta/30 to-transparent" />
     </section>
   );
 }

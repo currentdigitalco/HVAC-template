@@ -13,7 +13,6 @@ const NAV_LINKS = [
 
 export default function Navbar() {
   const [isScrolled, setIsScrolled] = useState(false);
-  const [theme, setTheme] = useState<"light" | "dark">("light");
   const [menuOpen, setMenuOpen] = useState(false);
   const navRef = useRef<HTMLElement>(null);
 
@@ -25,29 +24,6 @@ export default function Navbar() {
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
-  useEffect(() => {
-    const sections = document.querySelectorAll("[data-nav-theme]");
-    if (!sections.length) return;
-
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            const sectionTheme = (entry.target as HTMLElement).dataset
-              .navTheme as "light" | "dark";
-            setTheme(sectionTheme);
-          }
-        });
-      },
-      { rootMargin: "-80px 0px -80% 0px", threshold: 0 }
-    );
-
-    sections.forEach((section) => observer.observe(section));
-    return () => observer.disconnect();
-  }, []);
-
-  const isDark = theme === "dark";
-
   return (
     <>
       <nav
@@ -55,17 +31,14 @@ export default function Navbar() {
         className={cn(
           "fixed top-0 left-0 right-0 z-50 transition-all duration-700",
           isScrolled
-            ? isDark
-              ? "bg-navy/80 backdrop-blur-xl border-b border-white/5"
-              : "bg-white/90 backdrop-blur-xl shadow-lg border-b border-navy/5"
+            ? "bg-dark/80 backdrop-blur-xl border-b border-white/5"
             : "bg-transparent border-b border-transparent"
         )}
       >
-        {/* Top Bar - Still fixed height to prevent layout jumps, but fades out */}
+        {/* Top Bar — fades out on scroll */}
         <div className={cn(
-            "hidden md:block transition-all duration-500 overflow-hidden",
-            isScrolled ? "h-0 opacity-0" : "h-11 opacity-100",
-            isDark ? "text-white/70" : "text-navy/60"
+            "hidden md:block transition-all duration-500 overflow-hidden text-white/70",
+            isScrolled ? "h-0 opacity-0" : "h-11 opacity-100"
         )}>
             <div className={cn(
                 "mx-auto max-w-7xl px-6 lg:px-8 h-full flex items-center justify-between text-[10px] font-sans font-bold uppercase tracking-[0.2em]",
@@ -85,10 +58,7 @@ export default function Navbar() {
           <div className="flex h-20 items-center justify-between">
             <a
               href="#"
-              className={cn(
-                "font-serif text-2xl font-bold transition-colors duration-300",
-                isDark ? "text-white" : "text-navy"
-              )}
+              className="font-serif text-2xl font-bold text-white transition-colors duration-300"
             >
               Precision<span className="text-terracotta">Climate</span>
             </a>
@@ -98,10 +68,7 @@ export default function Navbar() {
                 <a
                   key={link.label}
                   href={link.href}
-                  className={cn(
-                    "relative font-sans text-xs font-bold uppercase tracking-[0.15em] transition-colors duration-300 hover:text-terracotta group",
-                    isDark ? "text-white/80" : "text-navy/70"
-                  )}
+                  className="relative font-sans text-xs font-bold uppercase tracking-[0.15em] text-white/80 transition-colors duration-300 hover:text-terracotta group"
                 >
                   {link.label}
                   <span className="absolute -bottom-1 left-0 h-[2px] w-0 bg-terracotta transition-all duration-300 ease-out group-hover:w-full" />
@@ -117,10 +84,7 @@ export default function Navbar() {
 
             <button
               onClick={() => setMenuOpen(!menuOpen)}
-              className={cn(
-                "p-2 transition-colors duration-300 md:hidden",
-                isDark ? "text-white" : "text-navy"
-              )}
+              className="p-2 text-white transition-colors duration-300 md:hidden"
               aria-label={menuOpen ? "Close menu" : "Open menu"}
             >
               {menuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -132,7 +96,7 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <div
         className={cn(
-          "fixed inset-0 z-40 flex flex-col items-center justify-center bg-navy transition-all duration-500 md:hidden",
+          "fixed inset-0 z-40 flex flex-col items-center justify-center bg-dark transition-all duration-500 md:hidden",
           menuOpen
             ? "translate-x-0"
             : "translate-x-full"

@@ -1,112 +1,118 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-ivory: #F8FAFC;
-  --color-ivory-alt: #F1F5F9;
+  --color-cream: #FFF8ED;
+  --color-cream-dim: #D4C9B8;
+  --color-dark: #0C0E12;
+  --color-dark-warm: #12100E;
+  --color-dark-mid: #1A1714;
   --color-navy: #0F172A;
   --color-navy-light: #1E293B;
   --color-accent-blue: #2563EB;
   --color-accent-blue-light: #60A5FA;
   --color-terracotta: #EA580C;
   --color-terracotta-light: #FB923C;
-  --color-sand: #CBD5E1;
-  --color-sand-light: #E2E8F0;
+  --color-sand: #8A7E74;
 
   --font-serif: var(--font-montserrat), "Helvetica", sans-serif;
   --font-sans: var(--font-inter), "Helvetica Neue", sans-serif;
 }
 
-/* Smooth scroll handled by Lenis */
-html {
-  scroll-behavior: auto;
-}
+html { scroll-behavior: auto; }
+html.lenis, html.lenis body { height: auto; }
+.lenis.lenis-smooth { scroll-behavior: auto; }
+.lenis.lenis-smooth [data-lenis-prevent] { overscroll-behavior: contain; }
 
-html.lenis, html.lenis body {
-  height: auto;
-}
-
-.lenis.lenis-smooth {
-  scroll-behavior: auto;
-}
-
-.lenis.lenis-smooth [data-lenis-prevent] {
-  overscroll-behavior: contain;
-}
-
+/* ONE DARK CANVAS — the Jesko Jets approach */
 body {
-  background-color: var(--color-ivory);
-  color: var(--color-navy);
+  background-color: var(--color-dark);
+  color: var(--color-cream);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Subtle grain texture overlay */
+/* Filmic grain */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.025;
+  opacity: 0.04;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
 }
 
-/* Custom scrollbar */
-::-webkit-scrollbar {
-  width: 6px;
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: var(--color-dark); }
+::-webkit-scrollbar-thumb { background: rgba(255,248,237,0.12); border-radius: 2px; }
+::-webkit-scrollbar-thumb:hover { background: var(--color-terracotta); }
+
+::selection { background-color: var(--color-terracotta); color: white; }
+
+@keyframes haze-drift {
+  0% { background-position: 0% 0%, 100% 100%; }
+  25% { background-position: 100% 30%, 0% 70%; }
+  50% { background-position: 50% 100%, 50% 0%; }
+  75% { background-position: 0% 70%, 100% 30%; }
+  100% { background-position: 0% 0%, 100% 100%; }
 }
 
-::-webkit-scrollbar-track {
-  background: var(--color-ivory);
-}
-
-::-webkit-scrollbar-thumb {
-  background: var(--color-sand);
-  border-radius: 3px;
-}
-
-::-webkit-scrollbar-thumb:hover {
-  background: var(--color-terracotta);
-}
-
-/* Selection */
-::selection {
-  background-color: var(--color-terracotta);
-  color: white;
-}
-
-/* Thermal hover effect for images */
-.thermal-hover {
-  position: relative;
-  overflow: hidden;
-}
-
+.thermal-hover { position: relative; overflow: hidden; }
 .thermal-hover::after {
   content: "";
   position: absolute;
   inset: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(194, 113, 79, 0) 0%,
-    rgba(194, 113, 79, 0.15) 40%,
-    rgba(212, 146, 122, 0.2) 60%,
-    rgba(194, 113, 79, 0) 100%
-  );
+  background: linear-gradient(135deg, rgba(234,88,12,0) 0%, rgba(234,88,12,0.2) 40%, rgba(234,88,12,0.25) 60%, rgba(234,88,12,0) 100%);
   opacity: 0;
   transition: opacity 0.6s ease;
   pointer-events: none;
   mix-blend-mode: color;
 }
+.thermal-hover:hover::after { opacity: 1; }
 
-.thermal-hover:hover::after {
-  opacity: 1;
+/* ── Section Emergence System ──
+   Each section scrolls UP and OVER the previous one.
+   The ::before gradient creates a smooth dark-to-dark
+   transition zone that overlaps the section above. */
+.section-emerge {
+  position: relative;
+  background-color: #0C0E12;
 }
 
-/* Respect reduced motion */
+.section-emerge::before {
+  content: "";
+  position: absolute;
+  top: -200px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(12,14,18,0.4) 40%, #0C0E12 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Warm variant — for sections with warm atmosphere */
+.section-emerge-warm {
+  position: relative;
+  background-color: #0F172A;
+}
+
+.section-emerge-warm::before {
+  content: "";
+  position: absolute;
+  top: -200px;
+  left: 0;
+  right: 0;
+  height: 200px;
+  background: linear-gradient(to bottom, transparent 0%, rgba(15,23,42,0.4) 40%, #0F172A 100%);
+  pointer-events: none;
+  z-index: 1;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     animation-duration: 0.01ms !important;

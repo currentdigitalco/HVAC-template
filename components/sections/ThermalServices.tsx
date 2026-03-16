@@ -60,20 +60,18 @@ function ThermalCard({ service }: { service: any }) {
 
   return (
     <div
-      className="group relative w-full overflow-hidden rounded-xl border border-navy/10 bg-white shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+      className="group relative w-full overflow-hidden rounded-xl bg-white/5 backdrop-blur-xl border border-white/10 shadow-xl transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
       onMouseMove={handleMouseMove}
       onMouseEnter={handleMouseEnter}
       onMouseLeave={handleMouseLeave}
     >
       <div className="relative h-[200px] sm:h-[250px] w-full overflow-hidden bg-black md:cursor-[url('data:image/svg+xml;utf8,<svg xmlns=\\'http://www.w3.org/2000/svg\\' width=\\'20\\' height=\\'20\\'><circle cx=\\'10\\' cy=\\'10\\' r=\\'8\\' fill=\\'rgba(255,100,0,0.5)\\' stroke=\\'white\\' stroke-width=\\'2\\'/></svg>'),_auto]">
-        {/* Mobile: full color image / Desktop: grayscale base for thermal effect */}
         <img
           src={service.image}
           alt={service.title}
           className="absolute inset-0 w-full h-full object-cover md:grayscale opacity-70 md:opacity-40 transition-opacity duration-500 md:group-hover:opacity-20"
         />
 
-        {/* Thermal overlay — desktop only */}
         <motion.div
           className="absolute inset-0 w-full h-full pointer-events-none z-10 opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:block"
           style={{
@@ -103,7 +101,6 @@ function ThermalCard({ service }: { service: any }) {
           }}
         />
 
-        {/* Revealed full color image — desktop only */}
         <motion.div
           className="absolute inset-0 w-full h-full overflow-hidden opacity-0 group-hover:opacity-100 transition-opacity duration-300 hidden md:block"
           style={{
@@ -132,22 +129,21 @@ function ThermalCard({ service }: { service: any }) {
           />
         </motion.div>
 
-        {/* Hover instruction — desktop only */}
         <div className="hidden md:flex absolute inset-0 items-center justify-center opacity-100 group-hover:opacity-0 transition-opacity duration-300 pointer-events-none">
-            <span className="px-4 py-2 bg-navy/80 text-white font-sans text-xs tracking-widest uppercase backdrop-blur-sm rounded-full border border-white/20">
+            <span className="px-4 py-2 bg-white/10 text-cream font-sans text-xs tracking-widest uppercase backdrop-blur-sm rounded-full border border-white/20">
                 Hover to Scan
             </span>
         </div>
       </div>
 
-      <div className="relative p-6 sm:p-8 bg-white z-20">
+      <div className="relative p-6 sm:p-8 bg-white/5 z-20">
         <div className="flex items-center gap-3 sm:gap-4 mb-3 sm:mb-4">
-          <div className="p-2.5 sm:p-3 bg-ivory rounded-lg text-terracotta transition-transform duration-300 group-hover:scale-110 group-hover:bg-terracotta/10">
+          <div className="p-2.5 sm:p-3 bg-white/10 rounded-lg text-terracotta transition-transform duration-300 group-hover:scale-110 group-hover:bg-terracotta/10">
             <service.icon size={22} />
           </div>
-          <h3 className="text-xl sm:text-2xl font-serif text-navy group-hover:text-terracotta transition-colors">{service.title}</h3>
+          <h3 className="text-xl sm:text-2xl font-serif text-cream group-hover:text-terracotta transition-colors">{service.title}</h3>
         </div>
-        <p className="text-navy/60 font-sans font-light leading-relaxed text-sm sm:text-base">
+        <p className="text-cream/60 font-sans font-light leading-relaxed text-sm sm:text-base">
           {service.description}
         </p>
         <a href="#contact" className="inline-flex items-center gap-2 mt-5 sm:mt-6 font-sans text-sm font-semibold text-terracotta md:opacity-0 md:group-hover:opacity-100 md:-translate-x-4 md:group-hover:translate-x-0 transition-all duration-300">
@@ -168,44 +164,49 @@ export default function ThermalServices() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      // Heading reveal
+      // Headings: clip-path wipe reveal (scrub-linked to scroll)
       const headingEls = sectionRef.current?.querySelectorAll(".heading-reveal");
       if (headingEls) {
-        gsap.fromTo(
-          headingEls,
-          { y: 40, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-                        duration: 0.8,
-            stagger: 0.12,
-            ease: "power2.out",
-            scrollTrigger: {
-              trigger: sectionRef.current,
-              start: "top 75%",
-            },
-          }
-        );
+        headingEls.forEach((el, i) => {
+          gsap.fromTo(
+            el,
+            { clipPath: "inset(0 100% 0 0)", opacity: 0 },
+            {
+              clipPath: "inset(0 0% 0 0)",
+              opacity: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: el,
+                start: `top ${82 - i * 4}%`,
+                end: `top ${52 - i * 4}%`,
+                scrub: 0.5,
+              },
+            }
+          );
+        });
       }
 
-      // Staggered card entrance
+      // Cards: scrub-linked y + scale entrance
       const cards = sectionRef.current?.querySelectorAll(".service-card");
       if (cards) {
-        gsap.fromTo(
-          cards,
-          { y: 60, opacity: 0 },
-          {
-            y: 0,
-            opacity: 1,
-            duration: 0.7,
-            stagger: 0.15,
-            ease: "power3.out",
-            scrollTrigger: {
-              trigger: cards[0],
-              start: "top 85%",
-            },
-          }
-        );
+        cards.forEach((card) => {
+          gsap.fromTo(
+            card,
+            { y: 60, opacity: 0, scale: 0.95 },
+            {
+              y: 0,
+              opacity: 1,
+              scale: 1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: card,
+                start: "top 92%",
+                end: "top 60%",
+                scrub: 0.5,
+              },
+            }
+          );
+        });
       }
     }, sectionRef);
 
@@ -213,28 +214,35 @@ export default function ThermalServices() {
   }, []);
 
   return (
-    <section ref={sectionRef} id="services" className="py-24 lg:py-32 bg-ivory relative" data-nav-theme="light">
-      <div className="max-w-7xl mx-auto px-6 lg:px-8">
+    <section
+      ref={sectionRef}
+      id="services"
+      className="py-24 lg:py-32 relative"
+      data-nav-theme="dark"
+    >
+
+      <div className="max-w-7xl mx-auto px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16 md:mb-24">
-          <span className="heading-reveal text-terracotta uppercase tracking-[0.3em] font-sans text-xs font-bold mb-4 block opacity-0">
+          <span className="heading-reveal text-terracotta uppercase tracking-[0.3em] font-sans text-xs font-bold mb-4 block">
             What We Do
           </span>
-          <h2 className="heading-reveal text-4xl md:text-5xl lg:text-6xl font-serif text-navy opacity-0">
+          <h2 className="heading-reveal text-4xl md:text-5xl lg:text-6xl font-serif text-cream">
             We see the invisible.
           </h2>
-          <p className="heading-reveal mt-6 text-navy/60 max-w-2xl mx-auto font-light font-sans text-lg opacity-0">
+          <p className="heading-reveal mt-6 text-cream/60 max-w-2xl mx-auto font-light font-sans text-lg">
             Stop guessing why your energy bills are high or your rooms are uncomfortable. We use advanced thermal diagnostics to pinpoint the problem and engineer the perfect fix.
           </p>
         </div>
 
         <div className="grid md:grid-cols-2 gap-8 lg:gap-12">
           {SERVICES.map((service, i) => (
-            <div key={i} className="service-card opacity-0">
+            <div key={i} className="service-card">
               <ThermalCard service={service} />
             </div>
           ))}
         </div>
       </div>
+
     </section>
   );
 }

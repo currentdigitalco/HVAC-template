@@ -18,7 +18,28 @@ export default function About() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      const img = imageRef.current?.querySelector("img");
+      // Image: clip-path reveal + parallax (scrub-linked)
+      const imageContainer = imageRef.current;
+      const img = imageContainer?.querySelector("img");
+
+      if (imageContainer) {
+        gsap.fromTo(
+          imageContainer,
+          { clipPath: "inset(10% 10% 10% 10%)", opacity: 0 },
+          {
+            clipPath: "inset(0% 0% 0% 0%)",
+            opacity: 1,
+            ease: "none",
+            scrollTrigger: {
+              trigger: imageContainer,
+              start: "top 85%",
+              end: "top 45%",
+              scrub: 0.5,
+            },
+          }
+        );
+      }
+
       if (img) {
         gsap.to(img, {
           yPercent: -15,
@@ -32,21 +53,44 @@ export default function About() {
         });
       }
 
+      // Text content: scrub-linked reveals with clip-path for headings
       const elements = contentRef.current?.querySelectorAll(".reveal-item");
       if (elements) {
         elements.forEach((el, i) => {
+          const isHeading = el.tagName === "SPAN" || el.tagName === "BLOCKQUOTE";
           gsap.fromTo(
             el,
-            { y: 50, opacity: 0 },
+            isHeading
+              ? { clipPath: "inset(0 100% 0 0)", opacity: 0 }
+              : { y: 30, opacity: 0 },
             {
-              y: 0,
+              ...(isHeading
+                ? { clipPath: "inset(0 0% 0 0)" }
+                : { y: 0 }),
               opacity: 1,
-              duration: 0.8,
-              ease: "power2.out",
-              scrollTrigger: { trigger: el, start: "top 85%" },
-              delay: i * 0.1,
+              ease: "none",
+              scrollTrigger: {
+                trigger: el,
+                start: `top ${85 - i * 3}%`,
+                end: `top ${55 - i * 3}%`,
+                scrub: 0.5,
+              },
             }
           );
+        });
+      }
+
+      // Text column parallax — slight upward drift for depth
+      if (contentRef.current) {
+        gsap.to(contentRef.current, {
+          yPercent: -8,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 0.5,
+          },
         });
       }
     }, sectionRef);
@@ -58,10 +102,10 @@ export default function About() {
     <section
       ref={sectionRef}
       id="about"
-      data-nav-theme="light"
-      className="relative overflow-hidden bg-ivory py-24 lg:py-32"
+      data-nav-theme="dark"
+      className="relative overflow-hidden py-24 lg:py-32"
     >
-      <div className="mx-auto max-w-7xl px-6 lg:px-8">
+      <div className="mx-auto max-w-7xl px-6 lg:px-8 relative z-10">
         <div className="grid items-center gap-12 lg:grid-cols-5 lg:gap-16">
           <div ref={imageRef} className="overflow-hidden lg:col-span-3">
             <div className="aspect-[4/5] overflow-hidden lg:aspect-[3/4]">
@@ -74,27 +118,27 @@ export default function About() {
           </div>
 
           <div ref={contentRef} className="lg:col-span-2">
-            <span className="reveal-item font-sans text-xs font-semibold uppercase tracking-[0.3em] text-terracotta opacity-0">
+            <span className="reveal-item font-sans text-xs font-semibold uppercase tracking-[0.3em] text-terracotta">
               Our Philosophy
             </span>
 
-            <blockquote className="reveal-item mt-6 opacity-0">
-              <p className="font-serif text-3xl italic leading-snug text-navy lg:text-4xl">
+            <blockquote className="reveal-item mt-6">
+              <p className="font-serif text-3xl italic leading-snug text-cream lg:text-4xl">
                 &ldquo;Every system we design is a promise of comfort that lasts
                 decades, not seasons.&rdquo;
               </p>
             </blockquote>
 
-            <div className="reveal-item mt-8 h-px w-16 bg-terracotta opacity-0" />
+            <div className="reveal-item mt-8 h-px w-16 bg-terracotta" />
 
-            <p className="reveal-item mt-8 font-sans text-base font-light leading-relaxed text-navy/50 opacity-0">
+            <p className="reveal-item mt-8 font-sans text-base font-light leading-relaxed text-cream/50">
               Founded on the principle that climate control is both science and
               craft, we bring engineering precision to every project. Our team
               combines decades of field experience with modern computational
               design tools.
             </p>
 
-            <p className="reveal-item mt-4 font-sans text-base font-light leading-relaxed text-navy/50 opacity-0">
+            <p className="reveal-item mt-4 font-sans text-base font-light leading-relaxed text-cream/50">
               From residential comfort to commercial-scale installations, we
               approach each space as unique — because it is. No templates, no
               shortcuts, just solutions that fit.
@@ -102,13 +146,14 @@ export default function About() {
 
             <a
               href="#contact"
-              className="reveal-item mt-8 inline-block font-sans text-sm font-medium text-terracotta transition-colors duration-300 hover:text-terracotta-light opacity-0"
+              className="reveal-item mt-8 inline-block font-sans text-sm font-medium text-terracotta transition-colors duration-300 hover:text-terracotta-light"
             >
               Meet the team &rarr;
             </a>
           </div>
         </div>
       </div>
+
     </section>
   );
 }

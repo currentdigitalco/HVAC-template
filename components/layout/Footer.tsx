@@ -74,14 +74,14 @@ export default function Footer() {
   }, []);
 
   return (
-    <footer ref={footerRef} className="bg-navy text-ivory/50" data-nav-theme="dark">
+    <footer ref={footerRef} className="relative text-cream/50" data-nav-theme="dark">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
         <div className="grid gap-12 md:grid-cols-3">
           <div className="footer-col opacity-0">
-            <h3 className="font-serif text-2xl text-ivory">
+            <h3 className="font-serif text-2xl text-cream">
               Precision Climate
             </h3>
-            <p className="mt-4 max-w-xs font-sans text-sm leading-relaxed text-ivory/30">
+            <p className="mt-4 max-w-xs font-sans text-sm leading-relaxed text-cream/30">
               Expert HVAC solutions crafted with precision. Residential and
               commercial comfort, designed to last.
             </p>
@@ -108,7 +108,7 @@ export default function Footer() {
           </div>
 
           <div className="footer-col opacity-0">
-            <h4 className="font-sans text-sm font-semibold uppercase tracking-widest text-ivory/20">
+            <h4 className="font-sans text-sm font-semibold uppercase tracking-widest text-cream/20">
               Services
             </h4>
             <ul className="mt-4 space-y-3">
@@ -126,7 +126,7 @@ export default function Footer() {
           </div>
 
           <div className="footer-col opacity-0">
-            <h4 className="font-sans text-sm font-semibold uppercase tracking-widest text-ivory/20">
+            <h4 className="font-sans text-sm font-semibold uppercase tracking-widest text-cream/20">
               Service Areas
             </h4>
             <ul className="mt-4 space-y-3">
@@ -139,12 +139,12 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="footer-bottom mt-16 flex flex-col items-center justify-between gap-4 border-t border-ivory/10 pt-8 md:flex-row opacity-0">
-          <p className="text-xs text-ivory/20">
+        <div className="footer-bottom mt-16 flex flex-col items-center justify-between gap-4 border-t border-white/10 pt-8 md:flex-row opacity-0">
+          <p className="text-xs text-cream/20">
             &copy; {new Date().getFullYear()} Precision Climate. All rights
             reserved.
           </p>
-          <p className="text-xs text-ivory/20">
+          <p className="text-xs text-cream/20">
             Designed by{" "}
             <a
               href="https://currentdigital.co"

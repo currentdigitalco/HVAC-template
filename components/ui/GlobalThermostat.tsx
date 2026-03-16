@@ -23,9 +23,9 @@ export default function GlobalThermostat() {
     <motion.div
       initial={{ opacity: 0, x: 100 }}
       animate={{ opacity: 1, x: 0 }}
-      className="fixed bottom-8 right-8 z-[100] hidden lg:flex items-center gap-4 bg-white/90 backdrop-blur-xl border border-navy/10 p-4 pr-6 rounded-full shadow-2xl"
+      className="fixed bottom-8 right-8 z-[100] hidden lg:flex items-center gap-4 bg-white/5 backdrop-blur-xl border border-white/10 p-4 pr-6 rounded-full shadow-2xl"
     >
-      <div className="w-12 h-12 rounded-full border-2 border-navy/5 flex items-center justify-center relative bg-ivory">
+      <div className="w-12 h-12 rounded-full border-2 border-white/10 flex items-center justify-center relative bg-white/5">
         <Thermometer size={20} className="text-terracotta" />
         <svg className="absolute -inset-[2px] w-[calc(100%+4px)] h-[calc(100%+4px)] -rotate-90">
             <motion.circle
@@ -45,9 +45,9 @@ export default function GlobalThermostat() {
       </div>
 
       <div className="flex flex-col items-start leading-tight">
-        <span className="text-[9px] uppercase tracking-widest text-navy/40 font-bold">Climate Confidence</span>
+        <span className="text-[9px] uppercase tracking-widest text-white/40 font-bold">Climate Confidence</span>
         <div className="flex items-baseline gap-1">
-            <span ref={scoreRef} className="text-lg font-serif font-black text-navy">
+            <span ref={scoreRef} className="text-lg font-serif font-black text-white">
                 0
             </span>
             <span className="text-[10px] font-sans font-bold text-accent-blue">%</span>
