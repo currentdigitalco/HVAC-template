@@ -1,4 +1,11 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import { gsap } from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { Phone, Mail, MapPin } from "lucide-react";
+
+gsap.registerPlugin(ScrollTrigger);
 
 const SERVICES = [
   "HVAC Installation",
@@ -17,11 +24,60 @@ const SERVICE_AREAS = [
 ];
 
 export default function Footer() {
+  const footerRef = useRef<HTMLElement>(null);
+
+  useEffect(() => {
+    const prefersReduced = window.matchMedia(
+      "(prefers-reduced-motion: reduce)"
+    ).matches;
+    if (prefersReduced) return;
+
+    const ctx = gsap.context(() => {
+      const columns = footerRef.current?.querySelectorAll(".footer-col");
+      if (columns) {
+        gsap.fromTo(
+          columns,
+          { y: 30, opacity: 0 },
+          {
+            y: 0,
+            opacity: 1,
+            duration: 0.6,
+            stagger: 0.12,
+            ease: "power2.out",
+            scrollTrigger: {
+              trigger: footerRef.current,
+              start: "top 90%",
+            },
+          }
+        );
+      }
+
+      const bottomBar = footerRef.current?.querySelector(".footer-bottom");
+      if (bottomBar) {
+        gsap.fromTo(
+          bottomBar,
+          { opacity: 0 },
+          {
+            opacity: 1,
+            duration: 0.8,
+            delay: 0.4,
+            scrollTrigger: {
+              trigger: footerRef.current,
+              start: "top 90%",
+            },
+          }
+        );
+      }
+    }, footerRef);
+
+    return () => ctx.revert();
+  }, []);
+
   return (
-    <footer className="bg-navy text-ivory/50" data-nav-theme="dark">
+    <footer ref={footerRef} className="bg-navy text-ivory/50" data-nav-theme="dark">
       <div className="mx-auto max-w-7xl px-6 py-16 lg:px-8 lg:py-20">
         <div className="grid gap-12 md:grid-cols-3">
-          <div>
+          <div className="footer-col opacity-0">
             <h3 className="font-serif text-2xl text-ivory">
               Precision Climate
             </h3>
@@ -51,7 +107,7 @@ export default function Footer() {
             </div>
           </div>
 
-          <div>
+          <div className="footer-col opacity-0">
             <h4 className="font-sans text-sm font-semibold uppercase tracking-widest text-ivory/20">
               Services
             </h4>
@@ -69,7 +125,7 @@ export default function Footer() {
             </ul>
           </div>
 
-          <div>
+          <div className="footer-col opacity-0">
             <h4 className="font-sans text-sm font-semibold uppercase tracking-widest text-ivory/20">
               Service Areas
             </h4>
@@ -83,7 +139,7 @@ export default function Footer() {
           </div>
         </div>
 
-        <div className="mt-16 flex flex-col items-center justify-between gap-4 border-t border-ivory/10 pt-8 md:flex-row">
+        <div className="footer-bottom mt-16 flex flex-col items-center justify-between gap-4 border-t border-ivory/10 pt-8 md:flex-row opacity-0">
           <p className="text-xs text-ivory/20">
             &copy; {new Date().getFullYear()} Precision Climate. All rights
             reserved.

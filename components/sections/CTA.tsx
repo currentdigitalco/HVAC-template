@@ -21,11 +21,10 @@ export default function CTA() {
       if (elements) {
         gsap.fromTo(
           elements,
-          { y: 50, opacity: 0, filter: "blur(8px)" },
+          { y: 50, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            filter: "blur(0px)",
             duration: 0.8,
             stagger: 0.15,
             ease: "power2.out",

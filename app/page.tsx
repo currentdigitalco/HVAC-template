@@ -17,10 +17,13 @@ export default function Home() {
       <Navbar />
       <main>
         <ThermostatHero />
+        <AirPath variant="wave" />
         <ThermalServices />
-        <AirPath />
+        <AirPath variant="step" color="#EA580C" />
         <ExplodedHVAC />
+        <AirPath variant="diagonal" />
         <PerformanceCaseStudies />
+        <AirPath variant="straight" color="#EA580C" opacity={0.1} />
         <About />
         <Stats />
         <Testimonial />

@@ -37,11 +37,10 @@ export default function About() {
         elements.forEach((el, i) => {
           gsap.fromTo(
             el,
-            { y: 50, opacity: 0, filter: "blur(6px)" },
+            { y: 50, opacity: 0 },
             {
               y: 0,
               opacity: 1,
-              filter: "blur(0px)",
               duration: 0.8,
               ease: "power2.out",
               scrollTrigger: { trigger: el, start: "top 85%" },

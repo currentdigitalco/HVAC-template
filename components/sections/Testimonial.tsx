@@ -22,11 +22,10 @@ export default function Testimonial() {
       if (elements) {
         gsap.fromTo(
           elements,
-          { y: 40, opacity: 0, filter: "blur(6px)" },
+          { y: 40, opacity: 0 },
           {
             y: 0,
             opacity: 1,
-            filter: "blur(0px)",
             duration: 0.8,
             stagger: 0.15,
             ease: "power2.out",
@@ -36,6 +35,36 @@ export default function Testimonial() {
             },
           }
         );
+      }
+
+      // Image parallax + reveal
+      const imageContainer = sectionRef.current?.querySelector(".testimonial-image");
+      const img = imageContainer?.querySelector("img");
+      if (imageContainer && img) {
+        gsap.fromTo(
+          imageContainer,
+          { clipPath: "inset(100% 0 0 0)" },
+          {
+            clipPath: "inset(0% 0 0 0)",
+            duration: 1,
+            ease: "power3.inOut",
+            scrollTrigger: {
+              trigger: imageContainer,
+              start: "top 80%",
+            },
+          }
+        );
+
+        gsap.to(img, {
+          yPercent: -12,
+          ease: "none",
+          scrollTrigger: {
+            trigger: sectionRef.current,
+            start: "top bottom",
+            end: "bottom top",
+            scrub: 0.5,
+          },
+        });
       }
     }, sectionRef);
 
@@ -85,11 +114,11 @@ export default function Testimonial() {
           </div>
 
           <div className="lg:col-span-2">
-            <div className="thermal-hover aspect-[3/4] overflow-hidden">
+            <div className="testimonial-image thermal-hover aspect-[3/4] overflow-hidden" style={{ clipPath: "inset(100% 0 0 0)" }}>
               <img
                 src="https://images.unsplash.com/photo-1600607687939-ce8a6c25118c?w=800&q=80"
                 alt="Beautiful home interior with modern climate control"
-                className="h-full w-full object-cover"
+                className="h-[120%] w-full object-cover"
               />
             </div>
           </div>
