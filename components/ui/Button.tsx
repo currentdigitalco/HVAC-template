@@ -18,12 +18,10 @@ export default function Button({
     "inline-flex items-center justify-center font-sans font-medium tracking-wide transition-all duration-300 cursor-pointer";
 
   const variants = {
-    primary:
-      "bg-teal text-white hover:bg-teal/90 active:scale-[0.98]",
-    secondary:
-      "bg-charcoal text-stone hover:bg-charcoal/90 active:scale-[0.98]",
+    primary: "bg-terracotta text-white hover:bg-terracotta-light active:scale-[0.98]",
+    secondary: "bg-navy text-ivory hover:bg-navy-light active:scale-[0.98]",
     outline:
-      "border-2 border-charcoal text-charcoal hover:bg-charcoal hover:text-stone active:scale-[0.98]",
+      "border-2 border-navy/20 text-navy hover:bg-navy hover:text-ivory active:scale-[0.98]",
   };
 
   const sizes = {

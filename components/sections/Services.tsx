@@ -1,54 +1,164 @@
 "use client";
 
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Thermometer, Wrench, Wind, Droplets } from "lucide-react";
+import { Thermometer, Wrench, Wind, Droplets, ChevronDown } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const SERVICES = [
   {
-    num: "01",
     title: "HVAC Installation",
     description:
-      "Complete heating, ventilation, and cooling system design and installation for new construction and retrofits. We engineer each system for peak efficiency and comfort.",
+      "Complete heating, ventilation, and cooling system design and installation for new construction and retrofits. We engineer each system for peak efficiency and comfort — no templates, no shortcuts.",
+    details: [
+      "Computational load calculations",
+      "Custom ductwork design",
+      "High-efficiency equipment selection",
+      "Full-system commissioning",
+    ],
     icon: Thermometer,
     image:
       "https://images.unsplash.com/photo-1504328345606-18bbc8c9d7d1?w=800&q=80",
   },
   {
-    num: "02",
     title: "Maintenance & Repair",
     description:
-      "Preventive maintenance programs and 24/7 emergency repair services. Keep your systems running at optimal performance year-round.",
+      "Preventive maintenance programs and 24/7 emergency repair services. We keep your systems running at optimal performance year-round with scheduled inspections and rapid response.",
+    details: [
+      "Seasonal tune-ups",
+      "24/7 emergency service",
+      "Performance diagnostics",
+      "Extended warranty programs",
+    ],
     icon: Wrench,
     image:
       "https://images.unsplash.com/photo-1621905252507-b35492cc74b4?w=800&q=80",
   },
   {
-    num: "03",
     title: "Ductwork Design",
     description:
-      "Precision ductwork engineering using computational fluid dynamics. Custom fabrication for maximum airflow efficiency and minimal energy loss.",
+      "Precision ductwork engineering for maximum airflow efficiency. Custom fabrication using computational fluid dynamics to minimize energy loss and optimize distribution.",
+    details: [
+      "CFD airflow modeling",
+      "Custom sheet metal fabrication",
+      "Duct sealing & insulation",
+      "Pressure balancing",
+    ],
     icon: Wind,
     image:
       "https://images.unsplash.com/photo-1558618666-fcd25c85f82e?w=800&q=80",
   },
   {
-    num: "04",
     title: "Indoor Air Quality",
     description:
-      "Advanced filtration, UV purification, and humidity control systems. Breathe cleaner air with solutions tailored to your space.",
+      "Advanced filtration, UV purification, and humidity control systems. Breathe cleaner, healthier air with solutions tailored to your space and sensitivities.",
+    details: [
+      "HEPA & UV-C filtration",
+      "Whole-home humidification",
+      "Air quality monitoring",
+      "Allergen & VOC reduction",
+    ],
     icon: Droplets,
     image:
       "https://images.unsplash.com/photo-1631545806609-05faf2faf3f5?w=800&q=80",
   },
 ];
 
+function ServiceAccordion({
+  service,
+  isOpen,
+  onToggle,
+}: {
+  service: (typeof SERVICES)[0];
+  isOpen: boolean;
+  onToggle: () => void;
+}) {
+  const Icon = service.icon;
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  return (
+    <div className="border-b border-sand/60">
+      <button
+        onClick={onToggle}
+        className="group flex w-full items-center justify-between py-6 text-left transition-colors duration-300 lg:py-8"
+        aria-expanded={isOpen}
+      >
+        <div className="flex items-center gap-6">
+          <Icon
+            size={24}
+            strokeWidth={1.5}
+            className={cn(
+              "transition-colors duration-300",
+              isOpen ? "text-terracotta" : "text-sand"
+            )}
+          />
+          <h3 className="font-serif text-2xl text-navy transition-colors duration-300 group-hover:text-terracotta lg:text-3xl">
+            {service.title}
+          </h3>
+        </div>
+        <ChevronDown
+          size={20}
+          className={cn(
+            "text-sand transition-transform duration-500",
+            isOpen && "rotate-180 text-terracotta"
+          )}
+        />
+      </button>
+
+      <div
+        ref={contentRef}
+        className="overflow-hidden transition-all duration-500 ease-in-out"
+        style={{
+          maxHeight: isOpen ? contentRef.current?.scrollHeight ?? 500 : 0,
+          opacity: isOpen ? 1 : 0,
+        }}
+      >
+        <div className="grid gap-8 pb-8 lg:grid-cols-5 lg:pb-12">
+          <div className="lg:col-span-3">
+            <p className="font-sans text-base font-light leading-relaxed text-navy/60">
+              {service.description}
+            </p>
+            <ul className="mt-6 space-y-2">
+              {service.details.map((detail) => (
+                <li
+                  key={detail}
+                  className="flex items-center gap-3 font-sans text-sm text-navy/50"
+                >
+                  <span className="h-1 w-1 rounded-full bg-terracotta" />
+                  {detail}
+                </li>
+              ))}
+            </ul>
+            <a
+              href="#contact"
+              className="mt-6 inline-block font-sans text-sm font-medium text-terracotta transition-colors duration-300 hover:text-terracotta-light"
+            >
+              Schedule a consultation &rarr;
+            </a>
+          </div>
+
+          <div className="lg:col-span-2">
+            <div className="thermal-hover aspect-[4/3] overflow-hidden">
+              <img
+                src={service.image}
+                alt={service.title}
+                className="h-full w-full object-cover"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 export default function Services() {
   const sectionRef = useRef<HTMLDivElement>(null);
   const headerRef = useRef<HTMLDivElement>(null);
+  const [openIndex, setOpenIndex] = useState(0);
 
   useEffect(() => {
     const prefersReduced = window.matchMedia(
@@ -57,43 +167,18 @@ export default function Services() {
     if (prefersReduced) return;
 
     const ctx = gsap.context(() => {
-      // Header reveal
       gsap.fromTo(
         headerRef.current,
-        { y: 60, opacity: 0 },
+        { y: 60, opacity: 0, filter: "blur(8px)" },
         {
           y: 0,
           opacity: 1,
+          filter: "blur(0px)",
           duration: 0.8,
           ease: "power2.out",
-          scrollTrigger: {
-            trigger: headerRef.current,
-            start: "top 80%",
-          },
+          scrollTrigger: { trigger: headerRef.current, start: "top 80%" },
         }
       );
-
-      // Cards stagger reveal
-      const cards = sectionRef.current?.querySelectorAll(".service-card");
-      if (cards) {
-        cards.forEach((card, i) => {
-          gsap.fromTo(
-            card,
-            { y: 80, opacity: 0 },
-            {
-              y: 0,
-              opacity: 1,
-              duration: 0.8,
-              ease: "power2.out",
-              scrollTrigger: {
-                trigger: card,
-                start: "top 85%",
-              },
-              delay: i * 0.1,
-            }
-          );
-        });
-      }
     }, sectionRef);
 
     return () => ctx.revert();
@@ -104,76 +189,31 @@ export default function Services() {
       ref={sectionRef}
       id="services"
       data-nav-theme="light"
-      className="relative bg-stone py-24 lg:py-32"
+      className="relative bg-ivory py-24 lg:py-32"
     >
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
-        {/* Section Header */}
-        <div ref={headerRef} className="mb-16 max-w-2xl opacity-0">
-          <span className="font-sans text-xs font-semibold uppercase tracking-[0.3em] text-teal">
+        <div ref={headerRef} className="mb-12 max-w-2xl opacity-0">
+          <span className="font-sans text-xs font-semibold uppercase tracking-[0.3em] text-terracotta">
             What We Do
           </span>
-          <h2 className="mt-3 font-serif text-4xl text-charcoal sm:text-5xl lg:text-6xl">
+          <h2 className="mt-3 font-serif text-4xl text-navy sm:text-5xl lg:text-6xl">
             Services built on precision
           </h2>
-          <p className="mt-4 font-sans text-lg font-light leading-relaxed text-charcoal/60">
+          <p className="mt-4 font-sans text-lg font-light leading-relaxed text-navy/50">
             Every project is approached with the rigor of engineering and the
             care of craftsmanship.
           </p>
         </div>
 
-        {/* Stacking Cards */}
-        <div className="space-y-6">
-          {SERVICES.map((service) => {
-            const Icon = service.icon;
-            return (
-              <div
-                key={service.num}
-                className="service-card sticky top-24 opacity-0"
-              >
-                <div className="overflow-hidden border border-stone-mid/40 bg-stone-light shadow-lg">
-                  <div className="grid items-center gap-8 p-8 md:grid-cols-5 lg:p-12">
-                    {/* Left: Number + Content */}
-                    <div className="md:col-span-3">
-                      <div className="flex items-center gap-4">
-                        <span className="font-serif text-6xl text-stone-mid/60 lg:text-7xl">
-                          {service.num}
-                        </span>
-                        <div className="h-px flex-1 bg-stone-mid/30" />
-                        <Icon
-                          size={24}
-                          className="text-teal"
-                          strokeWidth={1.5}
-                        />
-                      </div>
-                      <h3 className="mt-6 font-serif text-3xl text-charcoal lg:text-4xl">
-                        {service.title}
-                      </h3>
-                      <p className="mt-3 max-w-lg font-sans text-base font-light leading-relaxed text-charcoal/60">
-                        {service.description}
-                      </p>
-                      <a
-                        href="#contact"
-                        className="mt-6 inline-block font-sans text-sm font-medium text-teal transition-colors duration-300 hover:text-teal/70"
-                      >
-                        Learn more &rarr;
-                      </a>
-                    </div>
-
-                    {/* Right: Image */}
-                    <div className="md:col-span-2">
-                      <div className="aspect-[4/3] overflow-hidden">
-                        <img
-                          src={service.image}
-                          alt={service.title}
-                          className="h-full w-full object-cover transition-transform duration-700 hover:scale-105"
-                        />
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            );
-          })}
+        <div className="border-t border-sand/60">
+          {SERVICES.map((service, i) => (
+            <ServiceAccordion
+              key={service.title}
+              service={service}
+              isOpen={openIndex === i}
+              onToggle={() => setOpenIndex(openIndex === i ? -1 : i)}
+            />
+          ))}
         </div>
       </div>
     </section>

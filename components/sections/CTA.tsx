@@ -22,10 +22,11 @@ export default function CTA() {
       if (elements) {
         gsap.fromTo(
           elements,
-          { y: 50, opacity: 0 },
+          { y: 50, opacity: 0, filter: "blur(8px)" },
           {
             y: 0,
             opacity: 1,
+            filter: "blur(0px)",
             duration: 0.8,
             stagger: 0.15,
             ease: "power2.out",
@@ -46,20 +47,20 @@ export default function CTA() {
       ref={sectionRef}
       id="contact"
       data-nav-theme="dark"
-      className="relative flex min-h-[80vh] items-center bg-dark py-24 lg:py-32"
+      className="relative flex min-h-[80vh] items-center bg-navy py-24 lg:py-32"
     >
       <div className="mx-auto max-w-7xl px-6 text-center lg:px-8">
-        <span className="reveal-item font-sans text-xs font-semibold uppercase tracking-[0.3em] text-teal opacity-0">
+        <span className="reveal-item font-sans text-xs font-semibold uppercase tracking-[0.3em] text-terracotta opacity-0">
           Start Your Project
         </span>
 
-        <h2 className="reveal-item mt-6 font-serif text-5xl text-stone opacity-0 sm:text-6xl lg:text-7xl xl:text-8xl">
+        <h2 className="reveal-item mt-6 font-serif text-5xl text-ivory opacity-0 sm:text-6xl lg:text-7xl xl:text-8xl">
           Ready to transform
           <br />
           your space?
         </h2>
 
-        <p className="reveal-item mx-auto mt-6 max-w-lg font-sans text-lg font-light leading-relaxed text-stone/50 opacity-0">
+        <p className="reveal-item mx-auto mt-6 max-w-lg font-sans text-lg font-light leading-relaxed text-ivory/40 opacity-0">
           Schedule a free consultation and let us design a climate solution
           tailored to your space, budget, and comfort goals.
         </p>
@@ -78,7 +79,7 @@ export default function CTA() {
             variant="outline"
             size="lg"
             href="tel:+15551234567"
-            className="gap-2 border-stone/20 text-stone hover:bg-stone/10 hover:text-stone"
+            className="gap-2 border-ivory/20 text-ivory hover:bg-ivory/10 hover:text-ivory"
           >
             <Phone size={16} />
             (555) 123-4567

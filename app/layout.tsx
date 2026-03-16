@@ -1,26 +1,26 @@
 import type { Metadata } from "next";
-import { Instrument_Serif, Outfit } from "next/font/google";
+import { Cormorant_Garamond, Karla } from "next/font/google";
 import "./globals.css";
 
-const instrumentSerif = Instrument_Serif({
-  variable: "--font-instrument-serif",
+const cormorantGaramond = Cormorant_Garamond({
+  variable: "--font-cormorant-garamond",
   subsets: ["latin"],
-  weight: "400",
+  weight: ["400", "600"],
   style: ["normal", "italic"],
   display: "swap",
 });
 
-const outfit = Outfit({
-  variable: "--font-outfit",
+const karla = Karla({
+  variable: "--font-karla",
   subsets: ["latin"],
-  weight: ["300", "400", "500", "600", "700"],
+  weight: ["300", "400", "500", "600"],
   display: "swap",
 });
 
 export const metadata: Metadata = {
-  title: "Precision Climate | Premium HVAC Services",
+  title: "Precision Climate | The Architecture of Comfort",
   description:
-    "Expert HVAC installation, maintenance, and indoor air quality solutions. Crafted comfort for residential and commercial spaces.",
+    "Expert HVAC installation, maintenance, and indoor air quality solutions — engineered for lasting comfort in every space.",
 };
 
 export default function RootLayout({
@@ -30,7 +30,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${instrumentSerif.variable} ${outfit.variable}`}>
+      <body className={`${cormorantGaramond.variable} ${karla.variable}`}>
         {children}
       </body>
     </html>

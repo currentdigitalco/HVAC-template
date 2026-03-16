@@ -1,17 +1,17 @@
 @import "tailwindcss";
 
 @theme inline {
-  --color-stone: #F5F2ED;
-  --color-stone-mid: #D4C5B4;
-  --color-stone-light: #FAF8F5;
-  --color-charcoal: #1C1C1C;
-  --color-teal: #0C4A4A;
-  --color-teal-light: #E8F0EF;
-  --color-dark: #141414;
-  --color-dark-light: #1E1E1E;
+  --color-ivory: #F8F5F0;
+  --color-ivory-alt: #F0EDE7;
+  --color-navy: #0D1B2A;
+  --color-navy-light: #162A3F;
+  --color-terracotta: #C2714F;
+  --color-terracotta-light: #D4927A;
+  --color-sand: #D8D0C4;
+  --color-sand-light: #E8E2D8;
 
-  --font-serif: var(--font-instrument-serif), "Georgia", serif;
-  --font-sans: var(--font-outfit), "Helvetica Neue", sans-serif;
+  --font-serif: var(--font-cormorant-garamond), "Georgia", serif;
+  --font-sans: var(--font-karla), "Helvetica Neue", sans-serif;
 }
 
 /* Smooth scroll handled by Lenis */
@@ -32,22 +32,22 @@ html.lenis, html.lenis body {
 }
 
 body {
-  background-color: var(--color-stone);
-  color: var(--color-charcoal);
+  background-color: var(--color-ivory);
+  color: var(--color-navy);
   font-family: var(--font-sans);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   overflow-x: hidden;
 }
 
-/* Grain texture overlay */
+/* Subtle grain texture overlay */
 body::before {
   content: "";
   position: fixed;
   inset: 0;
   z-index: 9999;
   pointer-events: none;
-  opacity: 0.03;
+  opacity: 0.025;
   background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
   background-repeat: repeat;
   background-size: 256px 256px;
@@ -55,26 +55,53 @@ body::before {
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-stone);
+  background: var(--color-ivory);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: var(--color-stone-mid);
-  border-radius: 4px;
+  background: var(--color-sand);
+  border-radius: 3px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-teal);
+  background: var(--color-terracotta);
 }
 
-/* Selection color */
+/* Selection */
 ::selection {
-  background-color: var(--color-teal);
+  background-color: var(--color-terracotta);
   color: white;
+}
+
+/* Thermal hover effect for images */
+.thermal-hover {
+  position: relative;
+  overflow: hidden;
+}
+
+.thermal-hover::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(194, 113, 79, 0) 0%,
+    rgba(194, 113, 79, 0.15) 40%,
+    rgba(212, 146, 122, 0.2) 60%,
+    rgba(194, 113, 79, 0) 100%
+  );
+  opacity: 0;
+  transition: opacity 0.6s ease;
+  pointer-events: none;
+  mix-blend-mode: color;
+}
+
+.thermal-hover:hover::after {
+  opacity: 1;
 }
 
 /* Respect reduced motion */

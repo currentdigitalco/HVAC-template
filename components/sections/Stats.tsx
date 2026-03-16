@@ -45,7 +45,6 @@ export default function Stats() {
         });
       });
 
-      // Fade in labels
       const labels = sectionRef.current?.querySelectorAll(".stat-label");
       if (labels) {
         gsap.fromTo(
@@ -73,10 +72,9 @@ export default function Stats() {
     <section
       ref={sectionRef}
       data-nav-theme="dark"
-      className="relative bg-dark py-20 lg:py-28"
+      className="relative bg-navy py-20 lg:py-28"
     >
-      {/* Subtle top border accent */}
-      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-teal/40 to-transparent" />
+      <div className="absolute inset-x-0 top-0 h-px bg-gradient-to-r from-transparent via-terracotta/30 to-transparent" />
 
       <div className="mx-auto max-w-7xl px-6 lg:px-8">
         <div className="grid grid-cols-2 gap-8 md:grid-cols-4 md:gap-12">
@@ -84,16 +82,16 @@ export default function Stats() {
             <div key={stat.label} className="text-center">
               <div className="flex items-baseline justify-center gap-1">
                 <span
-                  className="stat-value font-serif text-5xl text-teal lg:text-6xl"
+                  className="stat-value font-serif text-5xl text-terracotta lg:text-6xl"
                   data-target={stat.value}
                 >
                   0
                 </span>
-                <span className="font-sans text-xl font-light text-teal/60">
+                <span className="font-sans text-xl font-light text-terracotta/50">
                   {stat.suffix}
                 </span>
               </div>
-              <p className="stat-label mt-3 font-sans text-sm font-light uppercase tracking-widest text-stone/40 opacity-0">
+              <p className="stat-label mt-3 font-sans text-sm font-light uppercase tracking-widest text-ivory/30 opacity-0">
                 {stat.label}
               </p>
             </div>
@@ -101,8 +99,7 @@ export default function Stats() {
         </div>
       </div>
 
-      {/* Subtle bottom border accent */}
-      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-teal/40 to-transparent" />
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-terracotta/30 to-transparent" />
     </section>
   );
 }
