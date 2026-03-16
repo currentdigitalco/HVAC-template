@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Montserrat, Inter } from "next/font/google";
 import "./globals.css";
+import GlobalThermostat from "@/components/ui/GlobalThermostat";
 
 const montserrat = Montserrat({
   variable: "--font-montserrat",
@@ -32,6 +33,7 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${montserrat.variable} ${inter.variable}`}>
         {children}
+        <GlobalThermostat />
       </body>
     </html>
   );

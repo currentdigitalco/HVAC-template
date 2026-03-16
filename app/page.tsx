@@ -4,7 +4,7 @@ import ThermostatHero from "@/components/sections/ThermostatHero";
 import ThermalServices from "@/components/sections/ThermalServices";
 import ExplodedHVAC from "@/components/sections/ExplodedHVAC";
 import AirPath from "@/components/sections/AirPath";
-import BeforeAfter from "@/components/sections/BeforeAfter";
+import PerformanceCaseStudies from "@/components/sections/PerformanceCaseStudies";
 import About from "@/components/sections/About";
 import Stats from "@/components/sections/Stats";
 import Testimonial from "@/components/sections/Testimonial";
@@ -20,7 +20,7 @@ export default function Home() {
         <ThermalServices />
         <AirPath />
         <ExplodedHVAC />
-        <BeforeAfter />
+        <PerformanceCaseStudies />
         <About />
         <Stats />
         <Testimonial />
